@@ -63,6 +63,16 @@ void print(node* head) {
     cout << "NULL" << endl;
 }
 
+void replace(node* &x, node* &y) {
+    node* pom = new node;
+    pom->val = x->val;
+    pom->next = y->next;
+    y->next = pom;
+    node* pom2 = x;
+    x = pom2->next;
+    delete pom2;
+}
+
 
 void copy_elems1(node* head) {
     //H->1->3->8->NULL
@@ -95,9 +105,11 @@ int main() {
     cout << head << endl;
     add(head, 1);
     addToEnd(head, 3);
-    addToEnd(head, 8);
     print(head);
-    copy_elems1(head);
+    print(head);
+    copy_elems2(head);
+    print(head);
+    replace(head, head->next);
     print(head);
     return 0;
 }
