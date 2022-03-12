@@ -6,6 +6,12 @@ struct node {
     node* next;
 };
 
+/*
+TODO:
+- usuwanie elementu w srodku stosu (z uzyciem stosu pomocniczego)
+- dodawanie elementu w srodku stosu (z uzyciem stosu pomocniczego)
+*/
+
 
 void push(node* &top, int val);
 
@@ -18,7 +24,6 @@ int size(node* top);
 void print_debug(node* top);
 
 int main(void) {
-
     node* top = nullptr;
     push(top, 1);
     push(top, 2);
