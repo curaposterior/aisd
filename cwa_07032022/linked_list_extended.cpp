@@ -1,16 +1,63 @@
-#include <iostream>
-using namespace std;
-
 /*
 Lista jednokierunkowa
 (czesc kodu zostala przygotowana przez prowadzacego zajecia)
 */
+
+#include <iostream>
+using namespace std;
+
 
 struct node
 {
 	int val;
 	node* next;
 };
+
+
+void add(node* &head, int new_val);
+
+void addBehind(node* &structure, int new_val);
+
+void del_structure(node* &head);
+
+void addToEnd(node* &head, int new_val);
+
+void print(node* head);
+
+void replace(node* &x, node* &y);
+
+void copy_elems1(node* head);
+
+void addBehindNum(node* &head, int x, int y);
+
+void copy_elems2(node* head);
+
+void zamienMiejscami(node* &head);
+
+void sub_x(node* &head, int x);
+
+void sub_x(node* &head, int x);
+
+
+int main() {
+	node* head = NULL;
+	cout << head << endl;
+	add(head, 1);
+	addToEnd(head, 2);
+	addToEnd(head, 3);
+	print(head);
+	
+	copy_elems2(head);
+	print(head);
+	
+	zamienMiejscami(head->next);
+	print(head);
+	
+	sub_x(head, 1);
+	print(head);
+	system("PAUSE");
+	return 0;
+}
 
 
 void add(node* &head, int new_val) {
@@ -62,6 +109,7 @@ void print(node* head) {
 	}
 	cout << "NULL" << endl;
 }
+
 
 void replace(node* &x, node* &y) {
 	node* pom = new node;
@@ -142,24 +190,4 @@ void sub_x(node* &head, int x) { //zamiana elementu x ze swoim nastepnikiem
 				zamienMiejscami(p->next);
 		}
 	}
-}
-
-int main() {
-	node* head = NULL;
-	cout << head << endl;
-	add(head, 1);
-	addToEnd(head, 2);
-	addToEnd(head, 3);
-	print(head);
-	
-	copy_elems2(head);
-	print(head);
-	
-	zamienMiejscami(head->next);
-	print(head);
-	
-	sub_x(head, 1);
-	print(head);
-	system("PAUSE");
-	return 0;
 }
