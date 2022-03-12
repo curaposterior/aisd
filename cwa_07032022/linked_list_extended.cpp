@@ -1,6 +1,11 @@
 /*
 Lista jednokierunkowa
 (czesc kodu zostala przygotowana przez prowadzacego zajecia)
+
+TODO:
+- dodac zamienianie ostatniego i pierwszego elementu
+- "sortowanie" listy jednokierunkowej (stworzenie listy pomocniczej
+i wstawianie na odpowiednie miejsca elementy)
 */
 
 #include <iostream>
