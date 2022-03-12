@@ -8,17 +8,21 @@ struct node {
 
 
 void push(node* &top, int val);
-void pop(node* &top);
+
+int pop(node* &top);
+
 bool empty(node* top);
+
 int size(node* top);
+
 void print_debug(node* top);
 
 int main(void) {
+
     node* top = nullptr;
-
-
-
-    cout << empty(top) << endl;
+    push(top, 1);
+    push(top, 2);
+    pop(top);
     return 0;
 }
 
@@ -29,6 +33,20 @@ void push(node* &top, int val) {
     p->next = top;
     top = p;
 }
+
+
+int pop(node* &top) {
+    int val;
+    if (top != nullptr) {
+        node* p = top;
+        top = top->next;
+        val = p->val;
+        delete p;
+        return val;
+    }
+    return -1;
+}
+
 
 bool empty(node* top) {
     if (top == nullptr)
