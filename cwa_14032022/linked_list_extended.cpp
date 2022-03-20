@@ -68,7 +68,7 @@ int main() {
 	addToEnd(head, 4);
 	addToEnd(head, 5);
 	*/
-	for (int i = 8; i < 16; i++)
+	for (int i = 2; i < 7; i++)
 		addToEnd(head, i);
 	print(head);
 
@@ -78,10 +78,12 @@ int main() {
 
 	//kinda_sort(head);
 	//print(head);
-
+	print(head);
 	node* head1 = nullptr;
 	node* head2 = nullptr;
-	node* head_main = nullptr;
+	split(head, head1, head2);
+	print(head1);
+	print(head2);
 	//split(head, head1, head2);
 	//print(head1);
 	//print(head2);
