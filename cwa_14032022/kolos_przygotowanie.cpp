@@ -6,7 +6,7 @@ struct node {
     node* next;
 };
 
-void print(node* head);
+    void print(node* head);
 
 void add(node* &head, int new_val);
 
@@ -26,6 +26,12 @@ void addReverselistLeft(node* &head);
 
 node* copy(node* &head);
 
+void split(node* &head, node* &head1, node* &head2);
+
+void swap(node* &head);
+
+void addAndSwap(node* &head);
+
 int main(void) {
     node* head = nullptr;
     cout << head << endl;
@@ -36,9 +42,7 @@ int main(void) {
     addToEnd(head, 4);
     addToEnd(head, 5);
     
-    addReverselistLeft(head);
-    print(head);
-   
+    
 
     return 0;
 }
@@ -149,6 +153,9 @@ void deleteEvenSum(node* &head) {
 }
 
 void addReverselistRight(node* &head) {
+    if (head == NULL)
+        return;
+
     node* p = head;
     node* c_head = copy(head);
     node* r_head = reverse(c_head);
@@ -161,6 +168,9 @@ void addReverselistRight(node* &head) {
 }
 
 void addReverselistLeft(node* &head) {
+    if (head == NULL)
+        return;
+
     node* c_head = copy(head);
     node* r_head = reverse(c_head);
 
@@ -195,4 +205,44 @@ node* copy(node* &head) {
         previous = previous->next;
     }
     return copied_head;
+}
+
+void split(node* &head, node* &head1, node* &head2) {
+    if (head == NULL) {
+        return;
+    }
+    else if (head != NULL && head->next == NULL) {
+        head1 = head;
+        head = nullptr;
+    }
+    else {
+        int n;
+        node* p = head;
+        while (p != NULL) {
+            n++;
+            p = p->next;
+        }
+
+        node* pom = head;
+        int iter = 1;
+        while (iter < n/2) {
+            pom = pom->next;
+            iter++;
+        }
+
+        head2 = pom->next;
+        pom->next = NULL;
+        head1 = head;
+        head = nullptr;
+    }
+}
+
+void swap(node* &head) {
+	//zamiana drugiego z pierwszym
+	if (head && head->next) {
+		node* p = head;
+		head = head->next;
+		p->next = head->next; //p->next->next;
+		head->next = p;
+	}
 }
