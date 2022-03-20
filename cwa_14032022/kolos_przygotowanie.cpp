@@ -6,31 +6,33 @@ struct node {
     node* next;
 };
 
-    void print(node* head);
+void print(node* head); //wypisywanie liczby
 
-void add(node* &head, int new_val);
+void add(node* &head, int new_val); // dodawanie struktury na poczatek
 
-void addToEnd(node* &head, int new_val); 
+void addToEnd(node* &head, int new_val); //dodawanie struktury na koniec listy
 
-void deletion(node* &head, int);
+void deletion(node* &head, int); //usuwanie wskazanego elementu (klucz = wartosc)
 
-node* reverse(node* &head);
+void deleteFirst(node* &head); //usuwanie elementu
 
-void delete_evens(node *&head);
+node* reverse(node* &head); //odwracanie listy
 
-void deleteEvenSum(node* &head);
+void delete_evens(node *&head); //usuwanie parzystych wartosci
 
-void addReverselistRight(node* &head);
+void deleteEvenSum(node* &head); //usuniece gdy suma dwoch nast. elem. jest parzysta
 
-void addReverselistLeft(node* &head);
+void addReverselistRight(node* &head); //np. 1->2->3 na  1->2->3->3->2->1
 
-node* copy(node* &head);
+void addReverselistLeft(node* &head); //np. 1->2->3 na 3->2->1->1->2->3
 
-void split(node* &head, node* &head1, node* &head2);
+node* copy(node* &head); //kopiowanie listy
 
-void swap(node* &head);
+void split(node* &head, node* &head1, node* &head2); //dzielenie listy na head1 i head2
 
-void addAndSwap(node* &head);
+void swap(node* &head); //zamiana pierwszego elementu z drugim
+
+void addSwapElems(node* &head); //zamiana elementow miedzy soba (np. H->1->2->2->4->4->NULL na H->2->1->4->2->4->NULL)
 
 int main(void) {
     node* head = nullptr;
@@ -38,11 +40,14 @@ int main(void) {
 
     addToEnd(head, 1);
     addToEnd(head, 2);
-    addToEnd(head, 3);
+    addToEnd(head, 2);
     addToEnd(head, 4);
-    addToEnd(head, 5);
+    addToEnd(head, 4);
+
+    print(head);
     
-    
+    addSwapElems(head);
+    print(head);
 
     return 0;
 }
@@ -98,6 +103,14 @@ void deletion(node* &head, int dval) {
     }
 }
 
+void deleteFirst(node* &head) {
+    if (head != NULL) {
+        node* p = head;
+        head = head->next;
+        delete p;
+    }
+} 
+
 node* reverse(node* &head) {
     node* prevp = nullptr;
     node* currp =  head;
@@ -146,10 +159,19 @@ void delete_evens(struct node *&head) {
 }
 
 void deleteEvenSum(node* &head) {
-    node *temp;
-    node *step;
-    node *prev;
-
+    add(head, 0); //dodanie guarda
+    if (head->next && head->next->next) {
+        node* p = head;
+        while (p->next && p->next->next) {
+            if ((p->next->val + p->next->next->val) % 2 == 0) {
+                deleteFirst(p->next);
+                deleteFirst(p->next);
+            }
+            else
+                p = p->next;
+        }
+        deleteFirst(head); //usuniecie guarda
+    }
 }
 
 void addReverselistRight(node* &head) {
@@ -244,5 +266,17 @@ void swap(node* &head) {
 		head = head->next;
 		p->next = head->next; //p->next->next;
 		head->next = p;
+	}
+}
+
+void addSwapElems(node* &head) {
+	if (head && head->next) {
+		swap(head);
+	}
+	else return;
+	node* tmp = head->next;
+	while (tmp->next && tmp->next->next) {
+		swap(tmp->next);
+		tmp = tmp->next->next;
 	}
 }

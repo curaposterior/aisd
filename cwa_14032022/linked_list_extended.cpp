@@ -345,7 +345,6 @@ void addSwapElems_code(node* &head) {
 		swap(tmp->next);
 		tmp = tmp->next->next;
 	}
-
 }
 
 void split(node* &head, node* &head1, node* &head2) {
