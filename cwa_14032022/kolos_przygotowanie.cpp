@@ -34,6 +34,13 @@ void swap(node* &head); //zamiana pierwszego elementu z drugim
 
 void addSwapElems(node* &head); //zamiana elementow miedzy soba (np. H->1->2->2->4->4->NULL na H->2->1->4->2->4->NULL)
 
+void swapFirstLast(node* &head); //zamiana ostatniego elementu z pierwszym
+
+//pseudo sortowanie
+void insertAccordingly(node *&H, int val);
+void kinda_sort(node* &head);
+
+
 int main(void) {
     node* head = nullptr;
     cout << head << endl;
@@ -45,8 +52,10 @@ int main(void) {
     addToEnd(head, 4);
 
     print(head);
-    
-    addSwapElems(head);
+    swap(head);
+    // addSwapElems(head);
+    print(head);
+    kinda_sort(head);
     print(head);
 
     return 0;
@@ -280,3 +289,56 @@ void addSwapElems(node* &head) {
 		tmp = tmp->next->next;
 	}
 }
+
+void swapFirstLast(node* &head) {
+	if (head != NULL && head->next != NULL) {
+		node* p = head;
+		while (p->next->next != nullptr)
+			p = p->next;
+
+		node* pom_head = new node;
+		pom_head->val = head->val;
+		pom_head->next = p->next;
+		p->next = pom_head;
+
+		p = p->next;
+		p->next->next = head->next;
+		head = p->next;
+		p->next = nullptr;
+	}
+}
+
+//pseudo sortowanie
+void insertAccordingly(node *&H, int val) { //dzieki kuba
+	node *t = new node;
+	t->next = H;
+	H = t;
+
+	node *p = H;
+	while (p->next && p->next->val < val)
+		p = p->next;
+
+	node *e = new node;
+	e->next = p->next;
+	e->val = val;
+	p->next = e;
+
+	node *d = t;
+	H = d->next;
+	delete d;
+}
+
+void kinda_sort(node* &head) {
+	node* p = head;
+	node* pom = new node;
+	pom->val = p->val;
+	pom->next = nullptr;
+	p = p->next;
+
+	while (p != nullptr) {
+		insertAccordingly(pom, p->val);
+		p = p->next;
+	}
+	head = pom;
+}
+// end

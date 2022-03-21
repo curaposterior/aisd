@@ -319,7 +319,6 @@ void swapFirstLast(node* &head) {
 		head = p->next;
 		p->next = nullptr;
 	}
-
 }
 
 //naprawic to
