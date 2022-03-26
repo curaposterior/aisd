@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 //#include <string>
 using namespace std;
 
@@ -14,11 +15,22 @@ void deletion(node* &head, int);
 void del_first(node* &head);
 void swap(node* &head);
 void swapElems(node* &head);
+void bubbleSort(node* &head);
 
 int main(void) {
+    node* head = nullptr;
+    cout << head << endl;
 
-    
+    random_device dev;
+    mt19937 rng(dev());
+    uniform_int_distribution<mt19937::result_type> dist6(1,100);
+    for (int i = 0; i < 10; i++) {
+        addToEnd(head, dist6(rng));
+    }
 
+    print(head);
+    bubbleSort(head);
+    print(head);
     return 0;
 }
 
@@ -101,4 +113,16 @@ void swapElems(node* &head) {
 		swap(tmp->next);
 		tmp = tmp->next->next;
 	}
+}
+
+
+//not working
+void bubbleSort(node* &head) {
+    node* p = head;
+    while (p->next && p->next->next) {
+        if (p->next->val > p->next->next->val) {
+            swapElems(p->next);
+        }
+        p = p->next;
+    }
 }
