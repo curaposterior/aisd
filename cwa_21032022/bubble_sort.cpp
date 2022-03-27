@@ -11,26 +11,29 @@ struct node {
 void print(node* head);
 void add(node* &head, int new_val);
 void addToEnd(node* &head, int new_val);
-void deletion(node* &head, int); 
-void del_first(node* &head);
 void swap(node* &head);
-void swapElems(node* &head);
 void bubbleSort(node* &head);
+void bubbleSortEffective(node* &head);
 
 int main(void) {
-    node* head = nullptr;
-    cout << head << endl;
+    node* head1 = nullptr;
+    node* head2 = nullptr;
+    cout << head1 << endl;
 
     random_device dev;
     mt19937 rng(dev());
     uniform_int_distribution<mt19937::result_type> dist6(1,100);
     for (int i = 0; i < 10; i++) {
-        addToEnd(head, dist6(rng));
+        addToEnd(head1, dist6(rng));
+        addToEnd(head2, dist6(rng));
     }
-
-    print(head);
-    bubbleSort(head);
-    print(head);
+    
+    print(head1);
+    print(head2);
+    bubbleSort(head1);
+    bubbleSortEffective(head2);
+    print(head1);
+    print(head2);
     return 0;
 }
 
@@ -68,31 +71,6 @@ void addToEnd(node* &head, int new_val) {
     delete e;
 }
 
-void deletion(node* &head, int dval) {
-    if (head->next == nullptr) {
-        node* toDelete = head;
-        head = head->next;
-        delete toDelete;
-    }
-    else {
-        node* p = head;
-        while (p && p->next->val != dval) {
-            p = p->next;
-        }
-        node* toDelete = p->next;
-        p->next = toDelete->next;
-        delete toDelete;
-    }
-}
-
-void del_first(node* &head) {
-    if (head != NULL) {
-        node* p = head;
-        head = head->next;
-        delete p;
-    }
-}
-
 void swap(node* &head) {
 	//zamiana drugiego z pierwszym
 	if (head && head->next) {
@@ -103,26 +81,94 @@ void swap(node* &head) {
 	}
 }
 
-void swapElems(node* &head) {
-	if (head && head->next) {
-		swap(head);
-	}
-	else return;
-	node* tmp = head->next;
-	while (tmp->next && tmp->next->next) {
-		swap(tmp->next);
-		tmp = tmp->next->next;
-	}
+void bubbleSort(node* &head) {
+    if (head == nullptr)
+        return;
+
+    int wykonania_petli = 0;
+    int counter = 0; // ilosc elementow
+    node* p = head;
+    node* curr = nullptr;
+    node* trail = nullptr;
+    node* temp = nullptr;
+
+    while (p != NULL) {
+        counter++;
+        p = p->next;
+        // wykonania_petli++;
+    }
+
+    for (int i = 0; i < counter; i++) {
+        curr = head;
+        trail = head;
+        
+        while (curr->next != NULL) {
+            if (curr->val > curr->next->val) {
+                temp = curr->next;
+                curr->next = curr->next->next;
+                temp->next = curr;
+
+                if (curr == head) { // jesli zamieniany byl pierwszy element (na glowie)
+                    head = temp;
+                    trail = temp;
+                }
+                else
+                    trail->next = temp;
+                curr = temp;
+            }
+            trail = curr;
+            curr = curr->next;
+
+            wykonania_petli++;
+        }
+        wykonania_petli++;
+    }
+    cout << "Ilosc wykonan petli (wersja zwykla): " << wykonania_petli << endl;
 }
 
+void bubbleSortEffective(node* &head) {
+        if (head == nullptr)
+        return;
 
-//not working
-void bubbleSort(node* &head) {
+    int wykonania_petli = 0;
+    int counter = 0; // ilosc elementow
     node* p = head;
-    while (p->next && p->next->next) {
-        if (p->next->val > p->next->next->val) {
-            swapElems(p->next);
-        }
+    node* curr = nullptr;
+    node* trail = nullptr;
+    node* temp = nullptr;
+    node* lastSwap = nullptr;
+
+    while (p != NULL) {
+        counter++;
         p = p->next;
+        // wykonania_petli++;
     }
+
+    for (int i = 0; i < counter; i++) {
+        curr = head;
+        trail = head;
+        
+        while (curr->next != NULL && curr != lastSwap) {
+            if (curr->val > curr->next->val) {
+                temp = curr->next;
+                curr->next = curr->next->next;
+                temp->next = curr;
+
+                if (curr == head) { // jesli zamieniany byl pierwszy element (na glowie)
+                    head = temp;
+                    trail = temp;
+                }
+                else
+                    trail->next = temp;
+                curr = temp;
+                lastSwap = temp;
+            }
+            trail = curr;
+            curr = curr->next;
+
+            wykonania_petli++;
+        }
+        wykonania_petli++;
+    }
+    cout << "Ilosc wykonan petli (wersja effective): " << wykonania_petli << endl;
 }
