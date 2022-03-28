@@ -1,6 +1,4 @@
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
 using namespace std;
 
 struct tree {
@@ -10,8 +8,11 @@ struct tree {
 };
 
 void insert(tree* &root, int x);
+
 void inorder(tree* root);
+
 tree* search(tree* root, int x);
+
 void printTree(tree* curr, int depth);
 
 
@@ -29,6 +30,7 @@ int main(void) {
 	system("PAUSE");
 	return 0;
 }
+
 
 void inorder(tree* root) {
 	if (root != nullptr) {
@@ -56,6 +58,7 @@ void insert(tree* &root, int x) {
 			insert(root->L, x);
 	}
 }
+
 
 tree* search(tree* root, int x) {
 	while (root && root->val != x) {
