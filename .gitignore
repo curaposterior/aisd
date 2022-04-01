@@ -1,4 +1,5 @@
 # Prerequisites
+#
 *.d
 
 # Compiled Object files
@@ -35,3 +36,4 @@
 .vscode
 powtorka.cpp
 cwa_21032022/buble.cpp
+cwa_28032022/bst.c
