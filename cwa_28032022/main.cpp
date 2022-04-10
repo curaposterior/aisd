@@ -24,7 +24,7 @@ int main(void) {
 	insert(root, 4);
 	//printTree(root, 3);
 	inorder(root);
-	tree* szukana = search(root, 4);
+	tree* szukana = search(root, 5);
 	cout << "Znalezniono: " << szukana->val << endl;
 
 	system("PAUSE");
