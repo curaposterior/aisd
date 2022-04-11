@@ -55,7 +55,7 @@ void addSwapElems_code(node* &head);
 
 void split(node* &head, node* &head1, node* &head2);
 
-void addTwoLists(node* &head, node* &head1, node* &head2);
+node* addTwoLists(node* H1, node* H2);
 
 int main() {
 	node* head = NULL;
@@ -377,6 +377,11 @@ void split(node* &head, node* &head1, node* &head2) {
 	}
 }
 
-void addTwoLists(node* &head, node* &head1, node* &head2) {
-
+node* addTwoLists(node* H1, node* H2) {
+	node* p1 = H1;
+	while (p1->next != NULL) {
+		p1 = p1->next;
+	}
+	p1->next = H2;
+	return H1;
 }
