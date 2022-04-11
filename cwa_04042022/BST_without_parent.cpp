@@ -11,7 +11,7 @@ void insert(tree* &, int);
 void printBT(const string &prefix, const tree *node, bool isLeft);
 void printBT(const tree *node);
 tree* search(tree*, int);
-void rotateRight(tree* &root);
+void rotateRight(tree* &root); //dzieki kuba
 void rotateLeft(tree* &root);
 void inorder(tree* root);
 
