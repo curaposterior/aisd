@@ -1,4 +1,4 @@
-
+#!/usr/bin/python3
 
 def wyznaczPivot(T, lewy, prawy):
     granica = lewy
