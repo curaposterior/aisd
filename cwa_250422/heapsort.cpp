@@ -1,7 +1,6 @@
 #include <iostream>
 using namespace std;
 
-
 void heapify(int, int, int*);
 void buildheap(int, int*);
 void heapsort(int, int*);
