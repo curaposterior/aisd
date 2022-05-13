@@ -7,10 +7,16 @@ int setPivot(int* T, int left, int right);
 void printArray(int* T, int n);
 
 int main(void) {
-
-    int* T = new int[10] {8, 1, 2, 3, 7, 8, 2, 1, 8, 9};
-    quicksort(T, 0, 9);
-    printArray(T, 10);
+    srand(NULL);
+    int* T = new int[20];
+    for (int f = 0; f < 20 ;f++) {
+        T[f] = (rand() % (100 + 1 - 1)) + 1;
+    }
+    // printArray(T, 10000);
+    int n = 20;    
+    printArray(T, n);
+    quicksort(T, 0, n - 1);
+    printArray(T, n);
 
     return 0;
 }
@@ -19,7 +25,6 @@ int main(void) {
 int setPivot(int* T, int left, int right) {
     int border = left;
     int pivot = right;
-
     for (int i = left; i < right; i++) {
         if (T[i] < T[pivot]) {
             int swap = T[i];
