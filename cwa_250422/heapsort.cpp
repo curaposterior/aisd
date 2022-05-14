@@ -8,7 +8,7 @@ void swap(int*, int*);
 void print(int* T, int n);
 
 int main(void) {
-	int pom[10] = { 0,-5,15,8,4,20,2,16,9,7 };
+	int pom[10] = { -100,-5,15,8,4,20,2,16,9,7 };
 	int* T = pom;
 	
 	print(T, 10);
@@ -19,7 +19,10 @@ int main(void) {
 	return 0;
 }
 
-void heapify(int o, int heapsize, int* T) {
+/*
+Zwraca najwiekszy element na gore kopca
+*/
+void heapify(int o, int heapsize, int* T) { 
 	int largest;
 
 	int L = 2 * o;
@@ -42,6 +45,9 @@ void buildheap(int heapsize, int* T) {
 		heapify(i, heapsize, T);
 }
 
+/*
+Indeksowanie od 1
+*/
 void heapsort(int size, int* T) {
 	int heapsize = size;
 	buildheap(heapsize, T);
