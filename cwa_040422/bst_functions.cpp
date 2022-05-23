@@ -2,7 +2,7 @@
 using namespace std;
 
 /*
-Wiekszosc kodu zostala zredagowana ze strony
+Wiekszosc kodu zostala zredagowana na  podstawie strony
 http://cslibrary.stanford.edu/110/BinaryTrees.html
 */
 
