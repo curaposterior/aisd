@@ -8,12 +8,12 @@ void swap(int*, int*);
 void print(int* T, int n);
 
 int main(void) {
-	int pom[10] = { -100,-5,15,8,4,20,2,16,9,7 };
+	int pom[6] = {   };
 	int* T = pom;
 	
-	print(T, 10);
-	heapsort(10, T);
-	print(T, 10);
+	print(T, 6);
+	heapsort(6, T);
+	print(T, 6);
 
 	system("PAUSE");
 	return 0;
@@ -52,7 +52,7 @@ void heapsort(int size, int* T) {
 	int heapsize = size;
 	buildheap(heapsize, T);
 
-	for (int i = heapsize-1; i > 0; i--) {
+	for (int i = heapsize-1; i > 1; i--) {
 		swap(T[1], T[i]);
 		heapify(1, i , T);
 	}
