@@ -21,46 +21,53 @@ struct node {
     node* next;
 };
 
-struct connect {
-    int index;
-    int too;
-    int dystanst;
-    connect* next;
+struct lista {
+    int index; //poczatek
+    int too;  // koniec
+    int dystans; //wartosc krawedzi
+    lista* next;
 };
 
-//int wczytajMacierz(fstream &plik, macierz &matrix, int size);
-//void wypiszMacierz(macierz & m); //ze struktura
+
 void printMacierz(int** wsk, int rozmiar);
 void wypelnijMacierz(int** wsk, int n);
-node* wczytajListeKrawedzi(fstream &plik, string nazwa);
 
 int** wczytaj(fstream &plik, string nazwa, int** macierz);
 node** stworzListeSasiedztwa(int** macierz, int size, node** head);
 int** zamienListeNaMacierz(node** head, int size, int** macierz);
+lista* wczytajListeKrawedzi(fstream &plik, string nazwa);
+
 void printTab(node** head, int size);
 void add(node* &head, int too, int dystans);
 void addToEnd(node* &head, int too, int dystans);
 void wyczyscMatrix(int** wsk, int n);
+void wypiszListeKrawedzi(lista* head);
 
 int main(void) {
-    fstream plik;
-    const int size = 5;
+    // fstream plik;
+    // const int size = 5;
 
-    int** a = nullptr;
+    // int** a = nullptr;
 
-    a = wczytaj(plik, "data.txt", a);
-    printMacierz(a, size);
+    // a = wczytaj(plik, "data.txt", a);
+    // printMacierz(a, size);
 
-    node** lista = nullptr;
-    lista = stworzListeSasiedztwa(a, size, lista);
-    // cout << lista[0]->next->dystans << endl;
-    printTab(lista, 5);
+    // node** lista = nullptr;
+    // lista = stworzListeSasiedztwa(a, size, lista);
     
-    int** macierz = nullptr;
-    macierz = zamienListeNaMacierz(lista, 5, macierz);
-    printMacierz(macierz, 5);
+    // printTab(lista, 5);
+    
+    // int** macierz = nullptr;
+    // macierz = zamienListeNaMacierz(lista, 5, macierz);
+    // printMacierz(macierz, 5);
 
-    wyczyscMatrix(a, size);
+    // wyczyscMatrix(a, size);
+
+    // fstream p;
+    // lista* head = nullptr;
+    // head = wczytajListeKrawedzi(p, "lista_krawedzi.txt");
+    // wypiszListeKrawedzi(head);
+
     return 0;
 }
 
@@ -137,6 +144,24 @@ void insertAtEnd(node* &first, int too, int dystans) {
     }
 }
 
+void insertAtEnd3Elems(lista* &first, int index, int too, int dystans) {
+    lista* temp = new lista;
+    
+    temp->index = index;
+    temp->too = too;
+    temp->dystans = dystans;
+    temp->next = nullptr;
+
+    if(!first) { // empty list becomes the new node
+        first = temp;
+        return;
+    } else { // find last and link the new node
+        lista* last = first;
+        while(last->next) last=last->next;
+        last->next = temp;
+    }
+}
+
 void print(node* head) {
     cout << "H->";
     node* p = head;
@@ -182,7 +207,7 @@ int** wczytaj(fstream &hf, string nazwa, int** a) {
     hf.close();
     return a;
 }
-
+    
 node** stworzListeSasiedztwa(int** macierz, int size, node** tab) {
     tab = new node*[size] {nullptr}; //https://stackoverflow.com/questions/2265664/how-to-dynamically-allocate-an-array-of-pointers-in-c
     for (int i = 0; i < size; i++) {
@@ -198,16 +223,6 @@ node** stworzListeSasiedztwa(int** macierz, int size, node** tab) {
     return tab;
 }
 
-node* wczytajListeKrawedzi(fstream &hf, string nazwa) {
-    hf.open(nazwa);
-    if (!hf.good()) {
-        cout << "Odmowa dostępu..." << endl;
-        return nullptr;
-    }
-    node* head = nullptr;
-    //while (hf >> )
-}
-
 int** zamienListeNaMacierz(node** lista, int size, int** macierz) {
     //tworze macierz dynamicznie i wypelniam ja zerami:
     macierz = new int*[size]; //row
@@ -220,11 +235,41 @@ int** zamienListeNaMacierz(node** lista, int size, int** macierz) {
     for (int i = 0; i < size; i++) {
         node* head = nullptr;
         head = lista[i];
-        while (head != nullptr) {
+        while (head != nullptr) { //tu przechodzimy po elementach tablicy wsk (po headach)
             macierz[i][(head->too)-1] = head->dystans;
             head = head->next;
         }
     }
-
     return macierz;
+}
+
+lista* wczytajListeKrawedzi(fstream &hf, string nazwa) {
+    hf.open(nazwa);
+    if (!hf.good()) {
+        cout << "Odmowa dostępu..." << endl;
+        return nullptr;
+    }
+    lista* head = nullptr;
+    int size = 0, el1 = 0, el2 = 0, el3 = 0;
+
+    hf >> size;
+    while (hf) {
+        //wczytaj po kolei index/too/dystans
+        hf >> el1;
+        hf >> el2;
+        hf >> el3;
+        insertAtEnd3Elems(head, el1, el2, el3);
+        // insertAtEnd3Elems(head, hf >> p->index, hf >> p->too, hf >> p->dystans);
+    }
+    return head;
+}
+
+void wypiszListeKrawedzi(lista* head) {
+    lista* p = head;
+    cout << "H-> ";
+    while (p != nullptr) {
+        cout << p->index << "/" << p->too << "/" << p->dystans << " -> ";
+        p = p->next;
+    }
+    cout << "NULL" <<  endl;
 }
