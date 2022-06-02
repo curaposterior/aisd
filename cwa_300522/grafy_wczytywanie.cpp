@@ -36,6 +36,7 @@ node* wczytajListeKrawedzi(fstream &plik, string nazwa);
 
 int** wczytaj(fstream &plik, string nazwa, int** macierz);
 node** stworzListeSasiedztwa(int** macierz, int size, node** head);
+int** zamienListeNaMacierz(node** head, int size, int** macierz);
 void printTab(node** head, int size);
 void add(node* &head, int too, int dystans);
 void addToEnd(node* &head, int too, int dystans);
@@ -55,6 +56,9 @@ int main(void) {
     // cout << lista[0]->next->dystans << endl;
     printTab(lista, 5);
     
+    int** macierz = nullptr;
+    macierz = zamienListeNaMacierz(lista, 5, macierz);
+    printMacierz(macierz, 5);
 
     wyczyscMatrix(a, size);
     return 0;
@@ -72,7 +76,7 @@ void printMacierz(int** wsk, int n) {
 void wypelnijMacierz(int** wsk, int n) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            wsk[i][j] = i;
+            wsk[i][j] = 0;
         }
     }
 }
@@ -158,7 +162,7 @@ int** wczytaj(fstream &hf, string nazwa, int** a) {
         return nullptr;
     }
     int size;
-    hf >> size;  // wczytaj rozmiar macierzy (size x size)
+    hf >> size;  // wczytaj rozmiar macierzy (size 2    x size)
     
     a = new int*[size]; //row
     for (int i = 0; i < size; ++i)
@@ -187,7 +191,7 @@ node** stworzListeSasiedztwa(int** macierz, int size, node** tab) {
         for (int j = 0; j < size; j++) {
             if (macierz[i][j] != 0) {
                 addToEnd(tab[i], j+1, macierz[i][j]);
-                //insertAtEnd(tab[i], j+1, macierz[i][j]);
+                //insertAtEnd(tab[i], j+1, macierz[i][j]) (alternatywna metoda);
             }
         }
     }
@@ -202,4 +206,25 @@ node* wczytajListeKrawedzi(fstream &hf, string nazwa) {
     }
     node* head = nullptr;
     //while (hf >> )
+}
+
+int** zamienListeNaMacierz(node** lista, int size, int** macierz) {
+    //tworze macierz dynamicznie i wypelniam ja zerami:
+    macierz = new int*[size]; //row
+    for (int i = 0; i < size; ++i)
+        macierz[i] = new int[size];  //col
+    
+    wypelnijMacierz(macierz, size);
+
+    // przypisanie elementow do odpowiednich miejsc
+    for (int i = 0; i < size; i++) {
+        node* head = nullptr;
+        head = lista[i];
+        while (head != nullptr) {
+            macierz[i][(head->too)-1] = head->dystans;
+            head = head->next;
+        }
+    }
+
+    return macierz;
 }
