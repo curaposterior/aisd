@@ -8,11 +8,21 @@ node** LS = new node* [size]
 for (int i = 0, i < size, i++)
     LS[i] = nullptr;
 
-ADD(H, S) -> ADD(LS[0], 5) - zaimplementowac funkcje dodajaca na tablice list
+Algorytm Prima:
+- szukanie drogi z kazdego wierzcholka do kazdego (najkroceJ)!
+- potrzebne rzeczy:
+    lista sasiedztwa/tablica kolorow/lista wynikowa (lista poszczegolnych krawedzi)
 
+zasada dzialania:
+1. okreslenie wierzcholka startowego (s)
+2. zmieniamy kolor wierzcholka
 
-stowrzyc tablice z zerami
-i jezeli element istnieje to dopisuje naura (pamietac zeby odjac 1)
+Algorytm Kruskala:
+potrzebne rzeczy:
+    - tablica kolorow
+    - tablica lasow
+    - lista posorotwanych krawedzi
+    - lista wynikowa krawedzi
 */
 
 struct node {
@@ -36,6 +46,9 @@ int** wczytaj(fstream &plik, string nazwa, int** macierz);
 node** stworzListeSasiedztwa(int** macierz, int size, node** head);
 int** zamienListeNaMacierz(node** head, int size, int** macierz);
 lista* wczytajListeKrawedzi(fstream &plik, string nazwa);
+node** zamienListeKrawedziNaListeSasiedztwa(lista* head, node** listaSasiedztwa, int size);
+int** zamienListeKrawedziNaMacierz(lista* head, int** macierz, int size);
+
 
 void printTab(node** head, int size);
 void add(node* &head, int too, int dystans);
@@ -63,10 +76,13 @@ int main(void) {
 
     // wyczyscMatrix(a, size);
 
-    // fstream p;
-    // lista* head = nullptr;
-    // head = wczytajListeKrawedzi(p, "lista_krawedzi.txt");
-    // wypiszListeKrawedzi(head);
+    fstream p;
+    lista* head = nullptr;
+    head = wczytajListeKrawedzi(p, "lista_krawedzi.txt");
+    wypiszListeKrawedzi(head);
+    int** macierz = nullptr;
+    macierz = zamienListeKrawedziNaMacierz(head, macierz, 5);
+    printMacierz(macierz, 5);
 
     return 0;
 }
@@ -259,7 +275,6 @@ lista* wczytajListeKrawedzi(fstream &hf, string nazwa) {
         hf >> el2;
         hf >> el3;
         insertAtEnd3Elems(head, el1, el2, el3);
-        // insertAtEnd3Elems(head, hf >> p->index, hf >> p->too, hf >> p->dystans);
     }
     return head;
 }
@@ -272,4 +287,64 @@ void wypiszListeKrawedzi(lista* head) {
         p = p->next;
     }
     cout << "NULL" <<  endl;
+}
+
+int** zamienListeKrawedziNaMacierz(lista* head, int** macierz, int size) {
+    if (head == nullptr) {
+        cout << "Lista jest pusta" << endl;
+        return nullptr;
+    }
+
+    macierz = new int*[size]; //row
+    for (int i = 0; i < size; ++i)
+        macierz[i] = new int[size];  //col
+    
+    wypelnijMacierz(macierz, size); //wypelnienie macierzy zerami
+
+    lista* p = head;
+
+    while (p != nullptr) {
+        cout << (p->index-1) << " " << p->too-1 << " " << p->dystans << endl;
+        macierz[p->index-1][p->too-1] = p->dystans;
+        p = p->next;
+    }
+
+    return macierz;
+}
+
+//Algorytm Prima: (s - wierzcholek od ktorego zaczynamy)
+node* algorytmPrima(node** listaSasiedztwa, int size, int s) {
+
+    int* tablicaKolorow = new int[size] {0};
+    node* tabWynikowa = nullptr;
+
+    //ustawienie poczatkowego stanu tablicy kolorow
+    tablicaKolorow[s] = 1;
+
+    for (int i = 0; i < size; i++) {
+        node* curr = listaSasiedztwa[i]; //kolejna lista z tablicy wskaznikow
+
+        if (tablicaKolorow[i] == 0) {
+            //szukamy minimum dla szarych wierzcholkow
+            node* p = curr;
+            int min;
+            while (p != nullptr) {
+                if (tablicaKolorow[p->too] == 1) {
+                    p = p->next;
+                }
+
+            }
+        }
+
+        else {
+            while (curr != nullptr) {
+
+            }
+        }
+
+    }
+
+
+
+    return tabWynikowa; //
 }
