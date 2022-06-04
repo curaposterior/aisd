@@ -48,7 +48,7 @@ int** zamienListeNaMacierz(node** head, int size, int** macierz);
 lista* wczytajListeKrawedzi(fstream &plik, string nazwa);
 node** zamienListeKrawedziNaListeSasiedztwa(lista* head, node** listaSasiedztwa, int size);
 int** zamienListeKrawedziNaMacierz(lista* head, int** macierz, int size);
-
+node* Prim(node** LE, int size, int s);
 
 void printTab(node** head, int size);
 void add(node* &head, int too, int dystans);
@@ -347,4 +347,25 @@ node* algorytmPrima(node** listaSasiedztwa, int size, int s) {
 
 
     return tabWynikowa; //
+}
+
+node* Prim(node** LE, int size, int s) {
+    int* ColorTable = new int[size] {0};
+
+    node* LR = nullptr; //lista wynikowa
+    ColorTable[s] = 1;
+    for (int i = 0; i < size; i++) { //dopoki cala tablica kolorow nie jest 1
+        for (int j = 0; i < size; i++) {
+            /*
+            jeżeli kolor w tablicy ColorTable[j] jest szary przeglądamy LE tego wierzchołka
+            i szukamy minimalnej krawędzi K prowadzącej do białego wierzchołk
+            
+            */
+        }
+        /*
+        Drugi wierzchołek krawędzi K kolorujemy na szary
+        Krawędź K dodajemy do listy wynikowych krawędzi LR;
+        */
+    }
+    return LR;
 }
