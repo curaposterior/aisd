@@ -48,7 +48,7 @@ int** zamienListeNaMacierz(node** head, int size, int** macierz);
 lista* wczytajListeKrawedzi(fstream &plik, string nazwa);
 node** zamienListeKrawedziNaListeSasiedztwa(lista* head, node** listaSasiedztwa, int size);
 int** zamienListeKrawedziNaMacierz(lista* head, int** macierz, int size);
-node* Prim(node** LE, int size, int s);
+lista* Prim(node** LE, int size, int s);
 
 void printTab(node** head, int size);
 void add(node* &head, int too, int dystans);
@@ -76,14 +76,23 @@ int main(void) {
 
     // wyczyscMatrix(a, size);
 
-    fstream p;
-    lista* head = nullptr;
-    head = wczytajListeKrawedzi(p, "lista_krawedzi.txt");
-    wypiszListeKrawedzi(head);
-    int** macierz = nullptr;
-    macierz = zamienListeKrawedziNaMacierz(head, macierz, 5);
-    printMacierz(macierz, 5);
+    // fstream p;
+    // lista* head = nullptr;
+    // head = wczytajListeKrawedzi(p, "lista_krawedzi.txt");
+    // wypiszListeKrawedzi(head);
+    // int** macierz = nullptr;
+    // macierz = zamienListeKrawedziNaMacierz(head, macierz, 5);
+    // printMacierz(macierz, 5);
 
+    fstream plik;
+    const int size = 8;
+    int ** macierz = nullptr;
+    macierz = wczytaj(plik, "data.txt", macierz);
+    node** listaSas = nullptr;
+    listaSas = stworzListeSasiedztwa(macierz, size, listaSas);
+    printTab(listaSas, size);
+    lista* tab = Prim(listaSas, size, 3);
+    wypiszListeKrawedzi(tab); //jest gdzies nieskonczona petla
     return 0;
 }
 
@@ -313,6 +322,7 @@ int** zamienListeKrawedziNaMacierz(lista* head, int** macierz, int size) {
 }
 
 //Algorytm Prima: (s - wierzcholek od ktorego zaczynamy)
+/*
 node* algorytmPrima(node** listaSasiedztwa, int size, int s) {
 
     int* tablicaKolorow = new int[size] {0};
@@ -323,49 +333,68 @@ node* algorytmPrima(node** listaSasiedztwa, int size, int s) {
 
     for (int i = 0; i < size; i++) {
         node* curr = listaSasiedztwa[i]; //kolejna lista z tablicy wskaznikow
-
-        if (tablicaKolorow[i] == 0) {
-            //szukamy minimum dla szarych wierzcholkow
-            node* p = curr;
-            int min;
-            while (p != nullptr) {
-                if (tablicaKolorow[p->too] == 1) {
-                    p = p->next;
-                }
-
-            }
-        }
-
-        else {
+        
+        if (tablicaKolorow[i] == 1) {
+            //przegladamy liste sasiedztwa wierzcholka
             while (curr != nullptr) {
+                if (tablicaKolorow[curr->too] == 1) curr = curr->next;
 
             }
         }
+        // if (tablicaKolorow[i] == 0) {
+        //     //szukamy minimum dla szarych wierzcholkow
+        //     node* p = curr;
+        //     int min;
+        //     while (p != nullptr) {
+        //         if (tablicaKolorow[p->too] == 1) {
+        //             p = p->next;
+        //         }
+        //     }
+        // }
 
+        // else {
+        //     while (curr != nullptr) {
+
+        //     }
+        // }
     }
-
-
-
     return tabWynikowa; //
-}
+}*/
 
-node* Prim(node** LE, int size, int s) {
+lista* Prim(node** LE, int size, int s) {
     int* ColorTable = new int[size] {0};
 
-    node* LR = nullptr; //lista wynikowa
+    lista* LR = nullptr; //lista wynikowa
     ColorTable[s] = 1;
-    for (int i = 0; i < size; i++) { //dopoki cala tablica kolorow nie jest 1
-        for (int j = 0; i < size; i++) {
-            /*
-            jeżeli kolor w tablicy ColorTable[j] jest szary przeglądamy LE tego wierzchołka
-            i szukamy minimalnej krawędzi K prowadzącej do białego wierzchołk
-            
-            */
-        }
+    //dopoki cala tablica kolorow nie jest 1
+    for (int j = 0; j < size; j++) {
         /*
+        jeżeli kolor w tablicy ColorTable[j] jest szary przeglądamy LE tego wierzchołka
+        i szukamy minimalnej krawędzi K prowadzącej do białego wierzchołk
+        */
+        int min = INT_MAX;
+        int indx;
+        if (ColorTable[j] == 1) {
+            node* p = LE[j];
+               
+            while (p != nullptr) {
+                if (ColorTable[p->too] == 1) {
+                    p = p->next;
+                    continue;
+                }
+                if (p->dystans < min) {
+                    min = p->dystans;
+                    indx = p->too;
+                }
+            }
+        }
+         /*
         Drugi wierzchołek krawędzi K kolorujemy na szary
         Krawędź K dodajemy do listy wynikowych krawędzi LR;
         */
+        ColorTable[indx] = 1;
+        insertAtEnd3Elems(LR, j, indx, min);
     }
+   
     return LR;
 }
