@@ -49,6 +49,9 @@ lista* wczytajListeKrawedzi(fstream &plik, string nazwa);
 node** zamienListeKrawedziNaListeSasiedztwa(lista* head, node** listaSasiedztwa, int size);
 int** zamienListeKrawedziNaMacierz(lista* head, int** macierz, int size);
 lista* Prim(node** LE, int size, int s);
+node* SearchMin(node *List, int *ColorTable); //znajdywanie min elementu w liscie uwzgledniajac colortable
+node* SearchMax(node *List, int *ColorTable); //znajdywanie max elementu w liscie uwzgledniajac colortable
+int EdgeListLength(lista *EdgeList); // zwraca dlugosc listy
 
 void printTab(node** head, int size);
 void add(node* &head, int too, int dystans);
@@ -57,33 +60,6 @@ void wyczyscMatrix(int** wsk, int n);
 void wypiszListeKrawedzi(lista* head);
 
 int main(void) {
-    // fstream plik;
-    // const int size = 5;
-
-    // int** a = nullptr;
-
-    // a = wczytaj(plik, "data.txt", a);
-    // printMacierz(a, size);
-
-    // node** lista = nullptr;
-    // lista = stworzListeSasiedztwa(a, size, lista);
-    
-    // printTab(lista, 5);
-    
-    // int** macierz = nullptr;
-    // macierz = zamienListeNaMacierz(lista, 5, macierz);
-    // printMacierz(macierz, 5);
-
-    // wyczyscMatrix(a, size);
-
-    // fstream p;
-    // lista* head = nullptr;
-    // head = wczytajListeKrawedzi(p, "lista_krawedzi.txt");
-    // wypiszListeKrawedzi(head);
-    // int** macierz = nullptr;
-    // macierz = zamienListeKrawedziNaMacierz(head, macierz, 5);
-    // printMacierz(macierz, 5);
-
     fstream plik;
     const int size = 8;
     int ** macierz = nullptr;
@@ -91,8 +67,10 @@ int main(void) {
     node** listaSas = nullptr;
     listaSas = stworzListeSasiedztwa(macierz, size, listaSas);
     printTab(listaSas, size);
-    lista* tab = Prim(listaSas, size, 3);
+    lista* tab = Prim(listaSas, size, 2);
     wypiszListeKrawedzi(tab); //jest gdzies nieskonczona petla
+
+
     return 0;
 }
 
@@ -321,6 +299,83 @@ int** zamienListeKrawedziNaMacierz(lista* head, int** macierz, int size) {
     return macierz;
 }
 
+lista* Prim(node** LE, int size, int s) {
+
+    lista* LR = nullptr; //lista wynikowa
+
+    int* ColorTable = new int[size] {0};
+    ColorTable[s] = 1;
+    
+    node* min = SearchMin(LE[s], ColorTable);
+    ColorTable[min->too] = 0;
+    insertAtEnd3Elems(LR, s, min->too, min->dystans);
+    
+    
+    while (EdgeListLength(LR) != size - 1) { //dopoki cala tablica kolorow nie jest 1
+        node* minElem = new node;
+        minElem->dystans = 0;
+        int pos;
+
+        //przechodzimy po liscie sasiedztwa:
+        for (int i = 0; i < size; i++) {
+            if (ColorTable[i] == 1) {
+                node* newMin = SearchMin(LE[i], ColorTable);
+                if (newMin == nullptr)
+                    continue;
+                if (minElem->dystans > newMin->dystans || minElem->dystans == 1) {
+                    minElem = newMin;
+                    pos = i;
+                }
+            }
+        }
+        ColorTable[minElem->too] = 1;
+        insertAtEnd3Elems(LR, pos, minElem->too, minElem->dystans);
+    }
+    return LR;
+}
+
+//https://github.com/DarkRec/Algo/blob/main/Ex.11/Prim.cpp
+node *SearchMin(node *List, int *ColorTable)  {
+    node *p = List;
+    node *max = SearchMax(List, ColorTable);
+    if (max == NULL)
+        return NULL;
+
+    node *min = max;
+    for (int i = 0; p; i++, p = p->next)
+        if (min->dystans > p->dystans && ColorTable[p->too] == 0)
+            min = p;
+
+    return min;
+}
+
+node *SearchMax(node *List, int *ColorTable) {
+    node *p = List;
+    node *max = new node;
+    max->dystans = 0;
+    while (p) {
+        if (max->dystans < p->dystans && ColorTable[p->too] == 0)
+            max = p;
+        p = p->next;
+    }
+    if (max->dystans == 0)
+        return NULL;
+
+    return max;
+}
+
+int EdgeListLength(lista *EdgeList) {
+    lista *p = EdgeList;
+    int size = 0;
+    while (p)
+    {
+        size++;
+        p = p->next;
+    }
+    return size;
+}
+
+//trash
 //Algorytm Prima: (s - wierzcholek od ktorego zaczynamy)
 /*
 node* algorytmPrima(node** listaSasiedztwa, int size, int s) {
@@ -360,41 +415,3 @@ node* algorytmPrima(node** listaSasiedztwa, int size, int s) {
     }
     return tabWynikowa; //
 }*/
-
-lista* Prim(node** LE, int size, int s) {
-    int* ColorTable = new int[size] {0};
-
-    lista* LR = nullptr; //lista wynikowa
-    ColorTable[s] = 1;
-    //dopoki cala tablica kolorow nie jest 1
-    for (int j = 0; j < size; j++) {
-        /*
-        jeżeli kolor w tablicy ColorTable[j] jest szary przeglądamy LE tego wierzchołka
-        i szukamy minimalnej krawędzi K prowadzącej do białego wierzchołk
-        */
-        int min = INT_MAX;
-        int indx;
-        if (ColorTable[j] == 1) {
-            node* p = LE[j];
-               
-            while (p != nullptr) {
-                if (ColorTable[p->too] == 1) {
-                    p = p->next;
-                    continue;
-                }
-                if (p->dystans < min) {
-                    min = p->dystans;
-                    indx = p->too;
-                }
-            }
-        }
-         /*
-        Drugi wierzchołek krawędzi K kolorujemy na szary
-        Krawędź K dodajemy do listy wynikowych krawędzi LR;
-        */
-        ColorTable[indx] = 1;
-        insertAtEnd3Elems(LR, j, indx, min);
-    }
-   
-    return LR;
-}
